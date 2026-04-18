@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задачи — Математика</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            background: #1a0a0a;
+            overflow: hidden;
+        }
+
+        /* Animated background */
+        .bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .bg span {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.5;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .bg span:nth-child(1) {
+            width: 500px; height: 500px;
+            background: #ff4d4d;
+            top: -10%; left: -5%;
+            animation-delay: 0s;
+        }
+
+        .bg span:nth-child(2) {
+            width: 400px; height: 400px;
+            background: #ff8080;
+            bottom: -10%; right: -5%;
+            animation-delay: -3s;
+        }
+
+        .bg span:nth-child(3) {
+            width: 350px; height: 350px;
+            background: #e63946;
+            top: 40%; left: 50%;
+            transform: translateX(-50%);
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-40px) scale(1.08); }
+        }
+
+        /* Card */
+        .card {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 100, 100, 0.15);
+            border-radius: 32px;
+            padding: 50px 60px 50px;
+            text-align: center;
+            box-shadow:
+                0 0 80px rgba(255, 77, 77, 0.1),
+                inset 0 0 80px rgba(255, 100, 100, 0.03);
+            width: 520px;
+            max-width: 95vw;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            animation: fadeUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .back-btn {
+            background: rgba(255, 100, 100, 0.1);
+            border: 1px solid rgba(255, 100, 100, 0.2);
+            border-radius: 14px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 100, 100, 0.2);
+            border-color: rgba(255, 100, 100, 0.4);
+            transform: scale(1.05);
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: #ff9a9a;
+        }
+
+        .title-section {
+            text-align: left;
+        }
+
+        .title {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #ff9a9a;
+        }
+
+        .heading {
+            font-size: 26px;
+            font-weight: 800;
+            color: #fff;
+            background: linear-gradient(135deg, #ffffff, #ffb3b3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Score badge */
+        .score-badge {
+            margin-left: auto;
+            background: linear-gradient(135deg, rgba(255, 77, 77, 0.2), rgba(255, 77, 77, 0.05));
+            border: 1px solid rgba(255, 77, 77, 0.25);
+            border-radius: 14px;
+            padding: 8px 16px;
+            flex-shrink: 0;
+        }
+
+        .score-badge .num {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ff6b6b;
+        }
+
+        .score-badge small {
+            font-size: 10px;
+            color: rgba(255, 150, 150, 0.5);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Divider */
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 100, 100, 0.2), transparent);
+            margin: 24px 0;
+        }
+
+        /* Tasks list */
+        .tasks-container {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+            text-align: left;
+        }
+
+        .tasks-container::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .tasks-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .tasks-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 100, 100, 0.2);
+            border-radius: 4px;
+        }
+
+        .tasks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+            animation-delay: 0.3s;
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            stroke: rgba(255, 100, 100, 0.2);
+            margin-bottom: 12px;
+        }
+
+        .empty-state p {
+            color: rgba(255, 150, 150, 0.3);
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Task item */
+        .task {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 100, 100, 0.08);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            animation: slideIn 0.4s ease forwards;
+            opacity: 0;
+        }
+
+        .task:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 100, 100, 0.15);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(15px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Custom checkbox */
+        .checkbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 7px;
+            border: 2px solid rgba(255, 100, 100, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .checkbox:hover {
+            border-color: rgba(255, 100, 100, 0.6);
+        }
+
+        .checkbox.checked {
+            background: linear-gradient(135deg, #ff6b6b, #e63946);
+            border-color: transparent;
+        }
+
+        .checkbox.checked::after {
+            content: '';
+            width: 6px;
+            height: 10px;
+            border: 2px solid #fff;
+            border-top: none;
+            border-left: none;
+            transform: rotate(45deg) translateY(-1px);
+        }
+
+        .task-text {
+            flex: 1;
+            font-size: 15px;
+            font-weight: 500;
+            color: #fff;
+            transition: all 0.3s ease;
+            line-height: 1.4;
+        }
+
+        .task.done .task-text {
+            text-decoration: line-through;
+            color: rgba(255, 200, 200, 0.3);
+        }
+
+        .task-time {
+            font-size: 11px;
+            color: rgba(255, 150, 150, 0.25);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .delete-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .task:hover .delete-btn {
+            opacity: 1;
+        }
+
+        .delete-btn:hover {
+            background: rgba(255, 60, 60, 0.15);
+        }
+
+        .delete-btn svg {
+            width: 14px;
+            height: 14px;
+            stroke: #ff6b6b;
+        }
+
+        /* Add task section */
+        .add-section {
+            margin-top: 20px;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px dashed rgba(255, 100, 100, 0.25);
+            background: rgba(255, 100, 100, 0.03);
+            color: #ff9a9a;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .add-btn:hover {
+            background: rgba(255, 100, 100, 0.08);
+            border-color: rgba(255, 100, 100, 0.4);
+            color: #ffb3b3;
+        }
+
+        .add-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+        }
+
+        /* Input overlay */
+        .input-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .input-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .input-modal {
+            background: rgba(30, 12, 12, 0.95);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 100, 100, 0.15);
+            border-radius: 24px;
+            padding: 36px;
+            width: 440px;
+            max-width: 90vw;
+            box-shadow: 0 0 60px rgba(255, 77, 77, 0.15);
+            transform: translateY(20px) scale(0.97);
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .input-overlay.active .input-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .input-modal h3 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .input-modal .hint {
+            font-size: 13px;
+            color: rgba(255, 150, 150, 0.35);
+            margin-bottom: 24px;
+        }
+
+        .task-input {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 100, 100, 0.15);
+            background: rgba(255, 255, 255, 0.04);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .task-input::placeholder {
+            color: rgba(255, 150, 150, 0.25);
+        }
+
+        .task-input:focus {
+            border-color: rgba(255, 100, 100, 0.4);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 20px rgba(255, 77, 77, 0.08);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 100, 100, 0.15);
+            background: transparent;
+            color: #ff9a9a;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 100, 100, 0.08);
+        }
+
+        .btn-add {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            border: none;
+            background: linear-gradient(135deg, #ff4d4d, #e63946);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(255, 77, 77, 0.3);
+        }
+
+        .btn-add:active {
+            transform: translateY(0);
+        }
+
+        /* Task count */
+        .task-count {
+            font-size: 12px;
+            color: rgba(255, 150, 150, 0.3);
+            letter-spacing: 1px;
+            margin-top: 12px;
+            text-align: right;
+        }
+
+        @media (max-width: 600px) {
+            .card { padding: 30px 24px 30px; border-radius: 24px; }
+            .heading { font-size: 22px; }
+            .score-badge { display: none; }
+            .header { gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="card">
+        <div class="header">
+            <a href="index.html" class="back-btn" title="Назад">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </a>
+            <div class="title-section">
+                <div class="title">Задачи</div>
+                <div class="heading">Математика</div>
+            </div>
+            <div class="score-badge">
+                <div class="num">82</div>
+                <small>баллов</small>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="tasks-container">
+            <div class="tasks-list" id="tasksList"></div>
+        </div>
+
+        <div class="add-section">
+            <button class="add-btn" id="openAddBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Добавить задачу
+            </button>
+            <div class="task-count" id="taskCount"></div>
+        </div>
+    </div>
+
+    <!-- Input Modal -->
+    <div class="input-overlay" id="inputOverlay">
+        <div class="input-modal">
+            <h3>Новая задача</h3>
+            <p class="hint">Что нужно сделать по математике?</p>
+            <input
+                type="text"
+                class="task-input"
+                id="taskInput"
+                placeholder="Например: веб по ном. 19..."
+                maxlength="200"
+                autocomplete="off"
+            >
+            <div class="modal-buttons">
+                <button class="btn-cancel" id="cancelBtn">Отмена</button>
+                <button class="btn-add" id="addBtn">Добавить</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'math_tasks';
+        const tasksList = document.getElementById('tasksList');
+        const taskInput = document.getElementById('taskInput');
+        const openAddBtn = document.getElementById('openAddBtn');
+        const inputOverlay = document.getElementById('inputOverlay');
+        const addBtn = document.getElementById('addBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const taskCount = document.getElementById('taskCount');
+
+        function getTasks() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        function saveTasks(tasks) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+        }
+
+        function formatTime(timestamp) {
+            const d = new Date(timestamp);
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const hours = String(d.getHours()).padStart(2, '0');
+            const mins = String(d.getMinutes()).padStart(2, '0');
+            return `${day}.${month} ${hours}:${mins}`;
+        }
+
+        function renderTasks() {
+            const tasks = getTasks();
+
+            if (tasks.length === 0) {
+                tasksList.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+                            <rect x="9" y="3" width="6" height="4" rx="1"/>
+                            <line x1="9" y1="12" x2="15" y2="12"/>
+                            <line x1="9" y1="16" x2="13" y2="16"/>
+                        </svg>
+                        <p>Задач пока нет. Добавьте первую!</p>
+                    </div>
+                `;
+                taskCount.textContent = '';
+                return;
+            }
+
+            const doneCount = tasks.filter(t => t.done).length;
+            taskCount.textContent = `${doneCount} из ${tasks.length} выполнено`;
+
+            tasksList.innerHTML = '';
+
+            tasks.forEach((task, index) => {
+                const el = document.createElement('div');
+                el.className = `task${task.done ? ' done' : ''}`;
+                el.style.animationDelay = `${index * 0.05}s`;
+
+                el.innerHTML = `
+                    <div class="checkbox${task.done ? ' checked' : ''}" data-index="${index}"></div>
+                    <span class="task-text">${escapeHtml(task.text)}</span>
+                    <span class="task-time">${formatTime(task.time)}</span>
+                    <button class="delete-btn" data-index="${index}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                `;
+
+                tasksList.appendChild(el);
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function openModal() {
+            inputOverlay.classList.add('active');
+            setTimeout(() => taskInput.focus(), 100);
+        }
+
+        function closeModal() {
+            inputOverlay.classList.remove('active');
+            taskInput.value = '';
+        }
+
+        function addTask() {
+            const text = taskInput.value.trim();
+            if (!text) {
+                taskInput.style.borderColor = 'rgba(255, 60, 60, 0.6)';
+                setTimeout(() => {
+                    taskInput.style.borderColor = '';
+                }, 800);
+                return;
+            }
+
+            const tasks = getTasks();
+            tasks.unshift({
+                text,
+                done: false,
+                time: Date.now()
+            });
+            saveTasks(tasks);
+            closeModal();
+            renderTasks();
+        }
+
+        function toggleTask(index) {
+            const tasks = getTasks();
+            tasks[index].done = !tasks[index].done;
+            saveTasks(tasks);
+            renderTasks();
+        }
+
+        function deleteTask(index) {
+            const tasks = getTasks();
+            tasks.splice(index, 1);
+            saveTasks(tasks);
+            renderTasks();
+        }
+
+        // Event listeners
+        openAddBtn.addEventListener('click', openModal);
+        cancelBtn.addEventListener('click', closeModal);
+        addBtn.addEventListener('click', addTask);
+
+        taskInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') addTask();
+            if (e.key === 'Escape') closeModal();
+        });
+
+        inputOverlay.addEventListener('click', (e) => {
+            if (e.target === inputOverlay) closeModal();
+        });
+
+        tasksList.addEventListener('click', (e) => {
+            const checkbox = e.target.closest('.checkbox');
+            if (checkbox) {
+                toggleTask(parseInt(checkbox.dataset.index));
+                return;
+            }
+            const deleteBtn = e.target.closest('.delete-btn');
+            if (deleteBtn) {
+                deleteTask(parseInt(deleteBtn.dataset.index));
+            }
+        });
+
+        // Initial render
+        renderTasks();
+    </script>
+</body>
+</html>
