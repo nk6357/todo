@@ -496,6 +496,9 @@
             text-decoration: none;
             cursor: pointer;
             transition: all 0.25s ease;
+            /* 👇 ДОБАВЛЕНО: чтобы ссылка была кликабельной поверх других элементов */
+            position: relative;
+            z-index: 50;
         }
 
         .analytics-link:hover {
@@ -725,3 +728,5 @@
         }
       });
     </script>
+</body>
+</html>
