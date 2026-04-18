@@ -378,6 +378,90 @@
             letter-spacing: 2px;
         }
 
+        /* Motivation Block */
+        .motivation-block {
+            position: relative;
+            z-index: 1;
+            width: min(92vw, 720px);
+            max-width: 720px;
+            margin-top: 32px;
+            background: var(--surface);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid var(--accent-border);
+            border-radius: 32px;
+            padding: clamp(32px, 5vw, 48px) clamp(24px, 6vw, 48px);
+            text-align: center;
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.14), inset 0 0 80px rgba(255, 255, 255, 0.03);
+            animation: fadeUp 0.8s ease forwards;
+            animation-delay: 0.3s;
+            opacity: 0;
+        }
+
+        .motivation-block .title {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent-text);
+            margin-bottom: 16px;
+        }
+
+        .motivation-content {
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .motivation-text {
+            font-size: clamp(16px, 4vw, 20px);
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .motivation-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 16px;
+            border: 1px solid var(--accent-border);
+            background: linear-gradient(135deg, var(--accent-soft), rgba(255, 255, 255, 0.05));
+            color: var(--accent-text);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .motivation-btn:hover {
+            background: linear-gradient(135deg, var(--accent-border), var(--surface-strong));
+            border-color: var(--accent-border-strong);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--accent-shadow);
+        }
+
+        .motivation-btn:active {
+            transform: translateY(0);
+        }
+
+        .motivation-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            stroke-width: 2;
+        }
+
         @media (max-width: 700px) {
             .settings-btn {
                 top: 20px;
@@ -496,6 +580,20 @@
         <div class="subtitle">Дорогу осилит идущий.</div>
     </div>
 
+    <!-- Motivation Block -->
+    <div class="motivation-block">
+        <div class="title">Мотивация</div>
+        <div class="motivation-content">
+            <div class="motivation-text" id="motivationText">Нажми на кнопку, чтобы получить мотивацию!</div>
+        </div>
+        <button class="motivation-btn" id="motivationBtn" type="button" aria-label="Получить мотивацию">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+            </svg>
+            Получить
+        </button>
+    </div>
+
     <script>
       // Регистрация Service Worker
       if ('serviceWorker' in navigator) {
@@ -505,7 +603,52 @@
             .catch(err => console.log('Ошибка:', err));
         });
       }
-    </script>
 
-</body>
-</html>
+      // Motivation block functionality
+      let motivations = [];
+      let currentMotivationIndex = -1;
+
+      async function loadMotivations() {
+        try {
+          const response = await fetch('./словарь.txt');
+          const text = await response.text();
+          motivations = text.split('\n').filter(line => line.trim().length > 0);
+        } catch (error) {
+          console.log('Не удалось загрузить словарь:', error);
+          motivations = ['Ты справишься! Верь в себя!', 'Каждый день — это новая возможность.'];
+        }
+      }
+
+      function getRandomMotivation() {
+        if (motivations.length === 0) return 'Нажми на кнопку, чтобы получить мотивацию!';
+        
+        let randomIndex;
+        do {
+          randomIndex = Math.floor(Math.random() * motivations.length);
+        } while (randomIndex === currentMotivationIndex && motivations.length > 1);
+        
+        currentMotivationIndex = randomIndex;
+        return motivations[randomIndex];
+      }
+
+      function displayMotivation() {
+        const motivationText = document.getElementById('motivationText');
+        const newMotivation = getRandomMotivation();
+        
+        motivationText.style.opacity = '0';
+        motivationText.style.animation = 'none';
+        
+        setTimeout(() => {
+          motivationText.textContent = newMotivation;
+          motivationText.style.animation = 'fadeIn 0.5s ease forwards';
+        }, 200);
+      }
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        await loadMotivations();
+        const motivationBtn = document.getElementById('motivationBtn');
+        if (motivationBtn) {
+          motivationBtn.addEventListener('click', displayMotivation);
+        }
+      });
+    </script>
