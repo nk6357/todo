@@ -1002,5 +1002,55 @@
             refreshAnalytics();
         });
     </script>
+
+    <script>
+      // Регистрация Service Worker для работы офлайн
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', async () => {
+          try {
+            const registration = await navigator.serviceWorker.register('./sw.js', {
+              scope: './'
+            });
+            console.log('[App] Service Worker зарегистрирован:', registration.scope);
+
+            // Проверка обновлений каждые 6 часов
+            setInterval(() => {
+              registration.update();
+            }, 6 * 60 * 60 * 1000);
+
+            // Слушаем новые обновления
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  console.log('[App] Доступно обновление приложения');
+                  if (confirm('Доступно обновление приложения. Установить?')) {
+                    newWorker.postMessage({ type: 'SKIP_WAITING' });
+                    window.location.reload();
+                  }
+                }
+              });
+            });
+          } catch (error) {
+            console.error('[App] Ошибка регистрации Service Worker:', error);
+          }
+        });
+
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (refreshing) return;
+          refreshing = true;
+          console.log('[App] Service Worker обновлён');
+        });
+      }
+
+      window.addEventListener('online', () => {
+        console.log('[App] Соединение восстановлено');
+      });
+
+      window.addEventListener('offline', () => {
+        console.log('[App] Потеря соединения - переход в офлайн-режим');
+      });
+    </script>
 </body>
 </html>
