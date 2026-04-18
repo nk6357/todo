@@ -953,17 +953,17 @@
         }
 
         function computeTotalScore() {
-            const averages = {
-                math: computeAverage(getLastResults('math')),
-                russian: computeAverage(getLastResults('russian')),
-                informatics: computeAverage(getLastResults('informatics'))
+            const nearest = {
+                math: findNearestPoint('math', computeAverage(getLastResults('math'))),
+                russian: findNearestPoint('russian', computeAverage(getLastResults('russian'))),
+                informatics: findNearestPoint('informatics', computeAverage(getLastResults('informatics')))
             };
             
-            const validAverages = Object.values(averages).filter(avg => avg !== null);
-            if (validAverages.length === 0) return null;
+            const validNearest = Object.values(nearest).filter(n => n !== null);
+            if (validNearest.length === 0) return null;
             
-            const total = validAverages.reduce((sum, avg) => sum + avg, 0);
-            return Math.round(total);
+            const total = validNearest.reduce((sum, n) => sum + n, 0);
+            return total;
         }
 
         function updateTotalScore() {
