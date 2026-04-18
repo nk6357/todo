@@ -15,9 +15,26 @@
 
     <!-- Цвет вкладки браузера под твой дизайн -->
     <meta name="theme-color" content="#1a0a0a">
+    <script src="./theme.js"></script>
 
     <title>Задачи — Математика</title>
     <style>
+        :root {
+            --page-bg: #1a0a0a;
+            --surface: rgba(255, 255, 255, 0.05);
+            --surface-strong: rgba(255, 255, 255, 0.1);
+            --accent-primary: #ff4d4d;
+            --accent-secondary: #ff8080;
+            --accent-tertiary: #e63946;
+            --accent-text: #ff9a9a;
+            --accent-text-alt: #ffb3b3;
+            --accent-soft: rgba(255, 100, 100, 0.1);
+            --accent-border: rgba(255, 100, 100, 0.25);
+            --accent-border-strong: rgba(255, 100, 100, 0.5);
+            --accent-shadow: rgba(255, 77, 77, 0.25);
+            --accent-dot: #ff4d4d;
+        }
+
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
         * {
@@ -32,7 +49,7 @@
             align-items: center;
             justify-content: center;
             font-family: 'Inter', sans-serif;
-            background: #1a0a0a;
+            background: var(--page-bg);
             overflow: hidden;
         }
 
@@ -53,21 +70,21 @@
 
         .bg span:nth-child(1) {
             width: 500px; height: 500px;
-            background: #ff4d4d;
+            background: var(--accent-primary);
             top: -10%; left: -5%;
             animation-delay: 0s;
         }
 
         .bg span:nth-child(2) {
             width: 400px; height: 400px;
-            background: #ff8080;
+            background: var(--accent-secondary);
             bottom: -10%; right: -5%;
             animation-delay: -3s;
         }
 
         .bg span:nth-child(3) {
             width: 350px; height: 350px;
-            background: #e63946;
+            background: var(--accent-tertiary);
             top: 40%; left: 50%;
             transform: translateX(-50%);
             animation-delay: -5s;
@@ -85,7 +102,7 @@
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 100, 100, 0.15);
+            border: 1px solid var(--accent-border);
             border-radius: 32px;
             padding: 50px 60px 50px;
             text-align: center;
@@ -114,8 +131,8 @@
         }
 
         .back-btn {
-            background: rgba(255, 100, 100, 0.1);
-            border: 1px solid rgba(255, 100, 100, 0.2);
+            background: var(--accent-soft);
+            border: 1px solid var(--accent-border);
             border-radius: 14px;
             width: 44px;
             height: 44px;
@@ -128,15 +145,15 @@
         }
 
         .back-btn:hover {
-            background: rgba(255, 100, 100, 0.2);
-            border-color: rgba(255, 100, 100, 0.4);
+            background: rgba(255, 255, 255, 0.14);
+            border-color: var(--accent-border-strong);
             transform: scale(1.05);
         }
 
         .back-btn svg {
             width: 20px;
             height: 20px;
-            stroke: #ff9a9a;
+            stroke: var(--accent-text);
         }
 
         .title-section {
@@ -148,14 +165,14 @@
             font-weight: 700;
             letter-spacing: 3px;
             text-transform: uppercase;
-            color: #ff9a9a;
+            color: var(--accent-text);
         }
 
         .heading {
             font-size: 26px;
             font-weight: 800;
             color: #fff;
-            background: linear-gradient(135deg, #ffffff, #ffb3b3);
+            background: linear-gradient(135deg, #ffffff, var(--accent-text-alt));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -164,8 +181,8 @@
         /* Score badge */
         .score-badge {
             margin-left: auto;
-            background: linear-gradient(135deg, rgba(255, 77, 77, 0.2), rgba(255, 77, 77, 0.05));
-            border: 1px solid rgba(255, 77, 77, 0.25);
+            background: linear-gradient(135deg, var(--accent-soft), rgba(255, 255, 255, 0.05));
+            border: 1px solid var(--accent-border);
             border-radius: 14px;
             padding: 8px 16px;
             flex-shrink: 0;
@@ -174,7 +191,7 @@
         .score-badge .num {
             font-size: 22px;
             font-weight: 800;
-            color: #ff6b6b;
+            color: var(--accent-primary);
         }
 
         .score-badge small {
@@ -188,7 +205,7 @@
         .divider {
             width: 100%;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 100, 100, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, var(--accent-border), transparent);
             margin: 24px 0;
         }
 
@@ -209,7 +226,7 @@
         }
 
         .tasks-container::-webkit-scrollbar-thumb {
-            background: rgba(255, 100, 100, 0.2);
+            background: var(--accent-soft);
             border-radius: 4px;
         }
 
@@ -378,9 +395,9 @@
         }
 
         .add-btn:hover {
-            background: rgba(255, 100, 100, 0.08);
-            border-color: rgba(255, 100, 100, 0.4);
-            color: #ffb3b3;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-border-strong);
+            color: var(--accent-text-alt);
         }
 
         .add-btn svg {

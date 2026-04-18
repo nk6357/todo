@@ -8,7 +8,8 @@ const urlsToCache = [
   './russian.html',
   './math.html',
   './informatics.html',
-  './manifest.json'
+  './manifest.json',
+  './theme.js'
 ];
 
 self.addEventListener('install', event => {

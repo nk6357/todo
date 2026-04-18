@@ -15,9 +15,26 @@
 
     <!-- Цвет вкладки браузера под твой дизайн -->
     <meta name="theme-color" content="#1a0a0a">
+    <script src="./theme.js"></script>
 
     <title>Цели на ЕГЭ</title>
     <style>
+        :root {
+            --page-bg: #1a0a0a;
+            --surface: rgba(255, 255, 255, 0.05);
+            --surface-strong: rgba(255, 255, 255, 0.1);
+            --accent-primary: #ff4d4d;
+            --accent-secondary: #ff8080;
+            --accent-tertiary: #e63946;
+            --accent-text: #ff9a9a;
+            --accent-text-alt: #ffb3b3;
+            --accent-soft: rgba(255, 100, 100, 0.1);
+            --accent-border: rgba(255, 100, 100, 0.25);
+            --accent-border-strong: rgba(255, 100, 100, 0.5);
+            --accent-shadow: rgba(255, 77, 77, 0.25);
+            --accent-dot: #ff4d4d;
+        }
+
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 
         * {
@@ -32,7 +49,7 @@
             align-items: center;
             justify-content: center;
             font-family: 'Inter', sans-serif;
-            background: #1a0a0a;
+            background: var(--page-bg);
             overflow: hidden;
         }
 
@@ -53,21 +70,21 @@
 
         .bg span:nth-child(1) {
             width: 500px; height: 500px;
-            background: #ff4d4d;
+            background: var(--accent-primary);
             top: -10%; left: -5%;
             animation-delay: 0s;
         }
 
         .bg span:nth-child(2) {
             width: 400px; height: 400px;
-            background: #ff8080;
+            background: var(--accent-secondary);
             bottom: -10%; right: -5%;
             animation-delay: -3s;
         }
 
         .bg span:nth-child(3) {
             width: 350px; height: 350px;
-            background: #e63946;
+            background: var(--accent-tertiary);
             top: 40%; left: 50%;
             transform: translateX(-50%);
             animation-delay: -5s;
@@ -79,45 +96,91 @@
         }
 
         /* Login button - top right corner */
-        .login-btn {
+        .settings-btn {
             position: fixed;
             top: 30px;
             right: 30px;
             z-index: 100;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 100, 100, 0.25);
-            background: rgba(255, 100, 100, 0.1);
-            backdrop-filter: blur(10px);
-            color: #ff9a9a;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            text-decoration: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 18px;
+            border: 1px solid var(--accent-border);
+            background: rgba(255, 255, 255, 0.08);
+            display: grid;
+            place-items: center;
+            color: var(--accent-text);
             cursor: pointer;
             transition: all 0.3s ease;
-            white-space: nowrap;
+            backdrop-filter: blur(10px);
         }
 
-        .login-btn:hover {
-            background: rgba(255, 100, 100, 0.2);
-            border-color: rgba(255, 100, 100, 0.5);
-            color: #ffb3b3;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(255, 77, 77, 0.25);
+        .settings-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--accent-border-strong);
+            box-shadow: 0 8px 32px var(--accent-shadow);
         }
 
-        .login-btn:active {
-            transform: translateY(0);
-        }
-
-        .login-btn svg {
-            width: 18px;
-            height: 18px;
+        .settings-btn svg {
+            width: 22px;
+            height: 22px;
             stroke: currentColor;
+        }
+
+        .theme-panel {
+            position: fixed;
+            top: 90px;
+            right: 30px;
+            z-index: 110;
+            width: 220px;
+            padding: 18px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--accent-border);
+            backdrop-filter: blur(24px);
+            opacity: 0;
+            transform: translateY(-12px);
+            pointer-events: none;
+            transition: all 0.2s ease;
+        }
+
+        .theme-panel.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .theme-panel .panel-title {
+            margin-bottom: 14px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-text);
+        }
+
+        .theme-options {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .theme-swatch {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 14px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .theme-swatch:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-border);
+        }
+
+        .theme-swatch.active {
+            border-color: #fff;
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12);
         }
 
         /* Card */
@@ -127,7 +190,7 @@
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 100, 100, 0.15);
+            border: 1px solid var(--accent-border);
             border-radius: 32px;
             padding: 50px 60px 60px;
             text-align: center;
@@ -141,7 +204,7 @@
             font-weight: 700;
             letter-spacing: 4px;
             text-transform: uppercase;
-            color: #ff9a9a;
+            color: var(--accent-text);
             margin-bottom: 10px;
         }
 
@@ -150,7 +213,7 @@
             font-weight: 800;
             color: #fff;
             margin-bottom: 50px;
-            background: linear-gradient(135deg, #ffffff, #ffb3b3);
+            background: linear-gradient(135deg, #ffffff, var(--accent-text-alt));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -265,11 +328,13 @@
             border-radius: 50%;
             margin-top: 8px;
             animation: pulse 2s ease-in-out infinite;
+            background: var(--accent-dot);
+            box-shadow: 0 0 12px var(--accent-shadow);
         }
 
-        .circle-item:nth-child(1) .glow-dot { background: #ff4d4d; box-shadow: 0 0 12px #ff4d4d; animation-delay: 0s; }
-        .circle-item:nth-child(2) .glow-dot { background: #ff8080; box-shadow: 0 0 12px #ff8080; animation-delay: 0.3s; }
-        .circle-item:nth-child(3) .glow-dot { background: #e63946; box-shadow: 0 0 12px #e63946; animation-delay: 0.6s; }
+        .circle-item:nth-child(1) .glow-dot { animation-delay: 0s; }
+        .circle-item:nth-child(2) .glow-dot { animation-delay: 0.3s; }
+        .circle-item:nth-child(3) .glow-dot { animation-delay: 0.6s; }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; transform: scale(1); }
@@ -280,7 +345,7 @@
         .divider {
             width: 60px;
             height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(255, 100, 100, 0.3), transparent);
+            background: linear-gradient(90deg, transparent, var(--accent-border), transparent);
             margin: 30px auto 0;
             border-radius: 2px;
         }
@@ -293,13 +358,13 @@
         }
 
         @media (max-width: 700px) {
-            .login-btn {
+            .settings-btn {
                 top: 20px;
                 right: 20px;
-                padding: 10px 18px;
-                font-size: 13px;
+                width: 44px;
+                height: 44px;
             }
-            .login-btn svg {
+            .settings-btn svg {
                 width: 16px;
                 height: 16px;
             }
@@ -319,15 +384,24 @@
         <span></span>
     </div>
 
-    <!-- Login button - top right -->
-    <a href="avtoriz.testovoerazreshenie" class="login-btn" id="loginBtn">
+    <button class="settings-btn" id="settingsBtn" type="button" aria-label="Настройки темы">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-            <polyline points="10 17 15 12 10 7"></polyline>
-            <line x1="15" y1="12" x2="3" y2="12"></line>
+            <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" />
+            <path d="M19.4 15a7.07 7.07 0 0 0 .1-1 7.07 7.07 0 0 0-.1-1l2.1-1.6a0.5 0.5 0 0 0 .1-0.7l-2-3.4a0.5 0.5 0 0 0-.6-0.2l-2.5 1a7.2 7.2 0 0 0-1.8-1l-0.4-2.7A0.5 0.5 0 0 0 14.7 4h-4a0.5 0.5 0 0 0-0.5 0.4l-0.4 2.7a7.2 7.2 0 0 0-1.8 1l-2.5-1a0.5 0.5 0 0 0-0.6 0.2l-2 3.4a0.5 0.5 0 0 0 .1 0.7l2.1 1.6a7.07 7.07 0 0 0-.1 1 7.07 7.07 0 0 0 .1 1L2.6 16.6a0.5 0.5 0 0 0-.1 0.7l2 3.4a0.5 0.5 0 0 0 .6 0.2l2.5-1a7.2 7.2 0 0 0 1.8 1l0.4 2.7a0.5 0.5 0 0 0 .5 0.4h4a0.5 0.5 0 0 0 .5-0.4l0.4-2.7a7.2 7.2 0 0 0 1.8-1l2.5 1a0.5 0.5 0 0 0 .6-0.2l2-3.4a0.5 0.5 0 0 0-.1-0.7l-2.1-1.6Z" />
         </svg>
-        Войти
-    </a>
+    </button>
+
+    <div class="theme-panel" id="themePanel">
+        <div class="panel-title">Выбери цвет</div>
+        <div class="theme-options">
+            <button class="theme-swatch" data-theme="red" style="background: #ff4d4d" aria-label="Красный"></button>
+            <button class="theme-swatch" data-theme="blue" style="background: #4d8cff" aria-label="Голубой"></button>
+            <button class="theme-swatch" data-theme="green" style="background: #33c37d" aria-label="Зеленый"></button>
+            <button class="theme-swatch" data-theme="yellow" style="background: #ffd34d" aria-label="Желтый"></button>
+            <button class="theme-swatch" data-theme="pink" style="background: #ff4dbd" aria-label="Ярко розовый"></button>
+            <button class="theme-swatch" data-theme="gray" style="background: #ababab" aria-label="Серый"></button>
+        </div>
+    </div>
 
     <div class="card">
         <div class="title">Цели на</div>
@@ -341,8 +415,8 @@
                     <svg class="progress-ring" viewBox="0 0 140 140">
                         <defs>
                             <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#ff6b6b"/>
-                                <stop offset="100%" stop-color="#ff4d4d"/>
+                                <stop offset="0%" stop-color="var(--accent-primary)"/>
+                                <stop offset="100%" stop-color="var(--accent-secondary)"/>
                             </linearGradient>
                         </defs>
                         <circle class="progress-ring__bg" cx="70" cy="70" r="65"/>
@@ -361,8 +435,8 @@
                     <svg class="progress-ring" viewBox="0 0 140 140">
                         <defs>
                             <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#ff8080"/>
-                                <stop offset="100%" stop-color="#e63946"/>
+                                <stop offset="0%" stop-color="var(--accent-primary)"/>
+                                <stop offset="100%" stop-color="var(--accent-secondary)"/>
                             </linearGradient>
                         </defs>
                         <circle class="progress-ring__bg" cx="70" cy="70" r="65"/>
@@ -381,8 +455,8 @@
                     <svg class="progress-ring" viewBox="0 0 140 140">
                         <defs>
                             <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#e63946"/>
-                                <stop offset="100%" stop-color="#c0392b"/>
+                                <stop offset="0%" stop-color="var(--accent-primary)"/>
+                                <stop offset="100%" stop-color="var(--accent-secondary)"/>
                             </linearGradient>
                         </defs>
                         <circle class="progress-ring__bg" cx="70" cy="70" r="65"/>
@@ -401,8 +475,6 @@
         <div class="subtitle">Дорогу осилит идущий.</div>
     </div>
 
-    <!-- Подключение функционала авторизации -->
-    <script src="avtoriz.testovoerazreshenie"></script>
     <script>
       // Регистрация Service Worker
       if ('serviceWorker' in navigator) {
