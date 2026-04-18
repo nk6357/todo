@@ -187,6 +187,14 @@
             transition: all 0.2s ease;
         }
 
+        .page-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 0;
+        }
+
         .theme-swatch:hover {
             transform: translateY(-2px);
             border-color: var(--accent-border);
@@ -530,9 +538,10 @@
         </div>
     </div>
 
-    <div class="card">
-        <div class="title">Цели на</div>
-        <h1 class="heading">ЕГЭ 2026</h1>
+    <div class="page-content">
+        <div class="card">
+            <div class="title">Цели на</div>
+            <h1 class="heading">ЕГЭ 2026</h1>
 
         <div class="circles">
 
@@ -615,6 +624,7 @@
             Получить
         </button>
     </div>
+</div>
 
     <script>
       // Регистрация Service Worker
