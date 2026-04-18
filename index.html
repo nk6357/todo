@@ -421,8 +421,12 @@
             color: var(--text-primary);
             line-height: 1.6;
             letter-spacing: 0.5px;
-            opacity: 0;
-            animation: fadeIn 0.5s ease forwards;
+            opacity: 1;
+            transition: opacity 0.2s ease;
+        }
+
+        .motivation-text.animate {
+            animation: fadeIn 0.4s ease forwards;
         }
 
         .motivation-btn {
@@ -445,7 +449,7 @@
         }
 
         .motivation-btn:hover {
-            background: linear-gradient(135deg, var(--accent-border), var(--surface-strong));
+            background: linear-gradient(135deg, var(--accent-soft), var(--surface-strong));
             border-color: var(--accent-border-strong);
             transform: translateY(-2px);
             box-shadow: 0 8px 24px var(--accent-shadow);
@@ -609,24 +613,35 @@
       let currentMotivationIndex = -1;
 
       async function loadMotivations() {
-        try {
-          const response = await fetch('./словарь.txt');
-          const text = await response.text();
-          motivations = text.split('\n').filter(line => line.trim().length > 0);
-        } catch (error) {
-          console.log('Не удалось загрузить словарь:', error);
-          motivations = ['Ты справишься! Верь в себя!', 'Каждый день — это новая возможность.'];
+        const paths = ['./словарь.txt', 'словарь.txt'];
+        for (const path of paths) {
+          try {
+            const response = await fetch(path);
+            if (!response.ok) continue;
+            const text = await response.text();
+            motivations = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+            if (motivations.length) return;
+          } catch (_) {
+            // попытка следующего пути
+          }
         }
+
+        motivations = [
+          'Ты справишься! Верь в себя!',
+          'Каждый день — это новая возможность.',
+          'Не сдавайся, ты почти там!',
+          'Успех ждёт тех, кто готов трудиться.'
+        ];
       }
 
       function getRandomMotivation() {
         if (motivations.length === 0) return 'Нажми на кнопку, чтобы получить мотивацию!';
-        
+
         let randomIndex;
         do {
           randomIndex = Math.floor(Math.random() * motivations.length);
         } while (randomIndex === currentMotivationIndex && motivations.length > 1);
-        
+
         currentMotivationIndex = randomIndex;
         return motivations[randomIndex];
       }
@@ -634,14 +649,15 @@
       function displayMotivation() {
         const motivationText = document.getElementById('motivationText');
         const newMotivation = getRandomMotivation();
-        
+
+        motivationText.classList.remove('animate');
         motivationText.style.opacity = '0';
-        motivationText.style.animation = 'none';
-        
+
         setTimeout(() => {
           motivationText.textContent = newMotivation;
-          motivationText.style.animation = 'fadeIn 0.5s ease forwards';
-        }, 200);
+          motivationText.style.opacity = '1';
+          motivationText.classList.add('animate');
+        }, 50);
       }
 
       document.addEventListener('DOMContentLoaded', async () => {
