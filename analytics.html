@@ -415,7 +415,7 @@
             height: 20px;
             border-radius: 6px;
             border: none;
-            background: rgba(255, 77, 77, 0.2);
+            background: color-mix(in srgb, var(--accent-primary) 20%, transparent);
             color: var(--accent-primary);
             cursor: pointer;
             display: grid;
@@ -426,7 +426,7 @@
         }
 
         .delete-btn:hover {
-            background: rgba(255, 77, 77, 0.4);
+            background: color-mix(in srgb, var(--accent-primary) 40%, transparent);
             color: #fff;
             transform: scale(1.1);
         }
@@ -579,7 +579,7 @@
             width: 64px;
             height: 64px;
             border-radius: 50%;
-            background: rgba(255, 77, 77, 0.15);
+            background: color-mix(in srgb, var(--accent-primary) 15%, transparent);
             display: grid;
             place-items: center;
             margin: 0 auto 20px;
@@ -643,11 +643,11 @@
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-tertiary));
             border-color: transparent;
             color: #fff;
-            box-shadow: 0 8px 24px rgba(255, 77, 77, 0.3);
+            box-shadow: 0 8px 24px color-mix(in srgb, var(--accent-primary) 30%, transparent);
         }
 
         .modal-btn.confirm:hover {
-            box-shadow: 0 12px 32px rgba(255, 77, 77, 0.4);
+            box-shadow: 0 12px 32px color-mix(in srgb, var(--accent-primary) 40%, transparent);
             transform: translateY(-2px);
         }
 
