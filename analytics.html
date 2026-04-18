@@ -253,8 +253,7 @@
         }
 
         .subject-btn,
-        .add-score-btn,
-        .analytics-link {
+        .add-score-btn {
             border-radius: 22px;
             border: 1px solid var(--accent-border);
             background: var(--surface);
@@ -266,18 +265,13 @@
             text-transform: uppercase;
             cursor: pointer;
             transition: all 0.25s ease;
-        }
-
-        .subject-btn,
-        .add-score-btn {
             padding: 14px 26px;
             min-width: 150px;
         }
 
         .subject-btn.active,
         .subject-btn:hover,
-        .add-score-btn:hover,
-        .analytics-link:hover {
+        .add-score-btn:hover {
             background: var(--surface-strong);
             border-color: var(--accent-border-strong);
             box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
@@ -389,7 +383,7 @@
             list-style: none;
         }
 
-        .results-list li {
+        .result-item {
             min-width: 60px;
             padding: 10px 14px;
             border-radius: 16px;
@@ -398,6 +392,50 @@
             color: var(--text-primary);
             font-weight: 700;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .result-item:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: var(--accent-border-strong);
+            transform: translateY(-1px);
+        }
+
+        .result-value {
+            flex: 1;
+        }
+
+        .delete-btn {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: none;
+            background: rgba(255, 77, 77, 0.2);
+            color: var(--accent-primary);
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            transition: all 0.2s ease;
+            padding: 0;
+            flex-shrink: 0;
+        }
+
+        .delete-btn:hover {
+            background: rgba(255, 77, 77, 0.4);
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        .delete-btn svg {
+            width: 12px;
+            height: 12px;
+            stroke: currentColor;
+            stroke-width: 2.5;
         }
 
         .input-row {
@@ -436,16 +474,181 @@
             font-weight: 700;
         }
 
+        /* Красивая кнопка "На главную" */
         .back-home {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 14px 28px;
-            width: min(320px, 90vw);
-            border-radius: 22px;
+            gap: 10px;
+            padding: 16px 32px;
+            width: min(340px, 90vw);
+            border-radius: 24px;
+            border: 1px solid var(--accent-border);
+            background: var(--surface);
             color: var(--accent-text);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
             text-decoration: none;
-            margin-top: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-home::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .back-home:hover {
+            background: var(--surface-strong);
+            border-color: var(--accent-border-strong);
+            color: var(--accent-text-alt);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15), 0 0 0 1px var(--accent-border-strong);
+        }
+
+        .back-home:hover::before {
+            opacity: 1;
+        }
+
+        .back-home:active {
+            transform: translateY(0);
+        }
+
+        .back-home svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            stroke-width: 2;
+            transition: transform 0.3s ease;
+        }
+
+        .back-home:hover svg {
+            transform: translateX(-3px);
+        }
+
+        /* Модальное окно подтверждения */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--accent-border);
+            border-radius: 28px;
+            padding: 32px 28px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(40px);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(255, 77, 77, 0.15);
+            display: grid;
+            place-items: center;
+            margin: 0 auto 20px;
+            border: 2px solid var(--accent-border);
+        }
+
+        .modal-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--accent-primary);
+            stroke-width: 2;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px 24px;
+            border-radius: 18px;
+            border: 1px solid var(--accent-border);
+            background: var(--surface);
+            color: var(--accent-text);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .modal-btn:hover {
+            background: var(--surface-strong);
+            border-color: var(--accent-border-strong);
+            transform: translateY(-1px);
+        }
+
+        .modal-btn.cancel {
+            background: transparent;
+        }
+
+        .modal-btn.confirm {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-tertiary));
+            border-color: transparent;
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(255, 77, 77, 0.3);
+        }
+
+        .modal-btn.confirm:hover {
+            box-shadow: 0 12px 32px rgba(255, 77, 77, 0.4);
+            transform: translateY(-2px);
         }
 
         @keyframes fillRing {
@@ -482,13 +685,32 @@
                 padding: 16px;
             }
 
-            .results-list li {
+            .result-item {
                 flex: 1 1 30%;
                 min-width: 80px;
+                padding: 8px 10px;
             }
 
             .input-row input {
                 width: 130px;
+            }
+
+            .back-home {
+                width: min(280px, 90vw);
+                padding: 14px 24px;
+                font-size: 13px;
+            }
+
+            .modal {
+                padding: 28px 24px;
+            }
+
+            .modal-title {
+                font-size: 18px;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
             }
         }
     </style>
@@ -516,6 +738,24 @@
             <button class="theme-swatch" data-theme="yellow" style="background: #ffd34d" aria-label="Желтый"></button>
             <button class="theme-swatch" data-theme="pink" style="background: #ff4dbd" aria-label="Ярко розовый"></button>
             <button class="theme-swatch" data-theme="gray" style="background: #ababab" aria-label="Серый"></button>
+        </div>
+    </div>
+
+    <!-- Модальное окно подтверждения удаления -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <div class="modal-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+            </div>
+            <div class="modal-title">Удалить результат?</div>
+            <div class="modal-text">Вы уверены, что хотите удалить этот результат пробного экзамена? Это действие нельзя отменить.</div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" id="cancelDelete">Отмена</button>
+                <button class="modal-btn confirm" id="confirmDelete">Удалить</button>
+            </div>
         </div>
     </div>
 
@@ -552,14 +792,20 @@
                 </div>
 
                 <div class="input-row">
-                    <input id="scoreInput" type="number" min="0" max="100" placeholder="Результат 0–100" aria-label="Результат" />
+                    <input id="scoreInput" type="number" min="1" max="100" placeholder="Результат 1–100" aria-label="Результат" />
                     <button type="button" id="addScoreButton" class="add-score-btn">Добавить</button>
                 </div>
                 <div class="summary-text">Среднее по последним трём результатам считается как сумма делённая на количество результатов.</div>
             </div>
         </div>
 
-        <a href="index.html" class="analytics-link">← На главную</a>
+        <a href="index.html" class="back-home">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            На главную
+        </a>
     </div>
 
     <script>
@@ -584,9 +830,13 @@
         const subjectName = document.getElementById('subjectName');
         const subjectButtons = document.querySelectorAll('.subject-btn');
         const progressFill = document.querySelector('.progress-ring__fill');
+        const deleteModal = document.getElementById('deleteModal');
+        const cancelDelete = document.getElementById('cancelDelete');
+        const confirmDelete = document.getElementById('confirmDelete');
 
         let currentSubject = 'math';
         let analyticsData = loadAnalyticsData();
+        let deleteIndex = null;
 
         function loadAnalyticsData() {
             try {
@@ -638,7 +888,22 @@
 
             const values = getLastResults(currentSubject);
             resultsCount.textContent = values.length + ' результата';
-            resultsList.innerHTML = values.length ? values.map(value => `<li>${value}</li>`).join('') : '<li style="min-width: auto; width: 100%; text-align:center; color: var(--text-muted);">Нет данных</li>';
+            
+            if (values.length) {
+                resultsList.innerHTML = values.map((value, index) => `
+                    <li class="result-item">
+                        <span class="result-value">${value}</span>
+                        <button class="delete-btn" data-index="${index}" aria-label="Удалить результат ${value}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </li>
+                `).join('');
+            } else {
+                resultsList.innerHTML = '<li style="min-width: auto; width: 100%; text-align:center; color: var(--text-muted);">Нет данных</li>';
+            }
 
             const average = computeAverage(values);
             const nearest = findNearestPoint(currentSubject, average);
@@ -655,7 +920,8 @@
 
         function addResult() {
             const rawValue = Number(scoreInput.value.trim());
-            if (!Number.isFinite(rawValue) || rawValue < 0 || rawValue > 100) {
+            // Запрещаем добавление нуля и невалидных значений
+            if (!Number.isFinite(rawValue) || rawValue < 1 || rawValue > 100) {
                 scoreInput.focus();
                 return;
             }
@@ -665,6 +931,32 @@
             refreshAnalytics();
         }
 
+        function showDeleteModal(index) {
+            deleteIndex = index;
+            deleteModal.classList.add('active');
+        }
+
+        function hideDeleteModal() {
+            deleteModal.classList.remove('active');
+            deleteIndex = null;
+        }
+
+        function confirmDeleteResult() {
+            if (deleteIndex !== null) {
+                const values = getLastResults(currentSubject);
+                const allValues = analyticsData[currentSubject] || [];
+                const startIndex = allValues.length - values.length;
+                const realIndex = startIndex + deleteIndex;
+                
+                allValues.splice(realIndex, 1);
+                analyticsData[currentSubject] = allValues;
+                saveAnalyticsData();
+                hideDeleteModal();
+                refreshAnalytics();
+            }
+        }
+
+        // Обработчики событий
         subjectButtons.forEach(button => {
             button.addEventListener('click', () => {
                 currentSubject = button.dataset.subject;
@@ -673,9 +965,36 @@
         });
 
         addScoreButton.addEventListener('click', addResult);
+        
         scoreInput.addEventListener('keypress', event => {
             if (event.key === 'Enter') {
                 addResult();
+            }
+        });
+
+        // Делегирование событий для кнопок удаления
+        resultsList.addEventListener('click', event => {
+            const deleteBtn = event.target.closest('.delete-btn');
+            if (deleteBtn) {
+                const index = parseInt(deleteBtn.dataset.index);
+                showDeleteModal(index);
+            }
+        });
+
+        // Модальное окно
+        cancelDelete.addEventListener('click', hideDeleteModal);
+        confirmDelete.addEventListener('click', confirmDeleteResult);
+        
+        deleteModal.addEventListener('click', event => {
+            if (event.target === deleteModal) {
+                hideDeleteModal();
+            }
+        });
+
+        // Закрытие по Escape
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && deleteModal.classList.contains('active')) {
+                hideDeleteModal();
             }
         });
 
