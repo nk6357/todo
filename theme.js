@@ -2,6 +2,11 @@ const THEME_STORAGE_KEY = 'egeTheme';
 const themes = {
   red: {
     name: 'Красный',
+    bg: '#1a0a0a',
+    surface: 'rgba(255, 255, 255, 0.05)',
+    surfaceStrong: 'rgba(255, 255, 255, 0.1)',
+    textPrimary: '#ffffff',
+    textMuted: 'rgba(255, 255, 255, 0.5)',
     primary: '#ff4d4d',
     secondary: '#ff8080',
     tertiary: '#e63946',
@@ -16,6 +21,11 @@ const themes = {
   },
   blue: {
     name: 'Голубой',
+    bg: '#071022',
+    surface: 'rgba(255, 255, 255, 0.06)',
+    surfaceStrong: 'rgba(255, 255, 255, 0.12)',
+    textPrimary: '#f8fbff',
+    textMuted: 'rgba(248, 251, 255, 0.55)',
     primary: '#4d8cff',
     secondary: '#80b3ff',
     tertiary: '#4da6ff',
@@ -24,12 +34,17 @@ const themes = {
     soft: 'rgba(77, 140, 255, 0.12)',
     border: 'rgba(77, 140, 255, 0.25)',
     borderStrong: 'rgba(77, 140, 255, 0.5)',
-    shadow: 'rgba(77, 140, 255, 0.25)',
+    shadow: 'rgba(77, 140, 255, 0.22)',
     dot: '#4d8cff',
     themeColor: '#06122d'
   },
   green: {
     name: 'Зеленый',
+    bg: '#091f14',
+    surface: 'rgba(255, 255, 255, 0.06)',
+    surfaceStrong: 'rgba(255, 255, 255, 0.12)',
+    textPrimary: '#f5fff3',
+    textMuted: 'rgba(245, 255, 243, 0.55)',
     primary: '#33c37d',
     secondary: '#7fe7b3',
     tertiary: '#2abf6e',
@@ -44,6 +59,11 @@ const themes = {
   },
   yellow: {
     name: 'Желтый',
+    bg: '#2f2600',
+    surface: 'rgba(255, 255, 255, 0.07)',
+    surfaceStrong: 'rgba(255, 255, 255, 0.14)',
+    textPrimary: '#fff8db',
+    textMuted: 'rgba(255, 248, 219, 0.55)',
     primary: '#ffd34d',
     secondary: '#ffea80',
     tertiary: '#ffbf4d',
@@ -58,6 +78,11 @@ const themes = {
   },
   pink: {
     name: 'Ярко розовый',
+    bg: '#290516',
+    surface: 'rgba(255, 255, 255, 0.06)',
+    surfaceStrong: 'rgba(255, 255, 255, 0.12)',
+    textPrimary: '#ffe8f4',
+    textMuted: 'rgba(255, 232, 244, 0.55)',
     primary: '#ff4dbd',
     secondary: '#ff80dc',
     tertiary: '#ff4d9a',
@@ -72,6 +97,11 @@ const themes = {
   },
   gray: {
     name: 'Серый',
+    bg: '#101010',
+    surface: 'rgba(255, 255, 255, 0.06)',
+    surfaceStrong: 'rgba(255, 255, 255, 0.12)',
+    textPrimary: '#f5f5f5',
+    textMuted: 'rgba(245, 245, 245, 0.55)',
     primary: '#ababab',
     secondary: '#d5d5d5',
     tertiary: '#8c8c8c',
@@ -90,6 +120,11 @@ function applyTheme(themeKey) {
   const theme = themes[themeKey] || themes.red;
   const root = document.documentElement;
 
+  root.style.setProperty('--page-bg', theme.bg);
+  root.style.setProperty('--surface', theme.surface);
+  root.style.setProperty('--surface-strong', theme.surfaceStrong);
+  root.style.setProperty('--text-primary', theme.textPrimary);
+  root.style.setProperty('--text-muted', theme.textMuted);
   root.style.setProperty('--accent-primary', theme.primary);
   root.style.setProperty('--accent-secondary', theme.secondary);
   root.style.setProperty('--accent-tertiary', theme.tertiary);
