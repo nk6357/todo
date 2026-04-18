@@ -477,6 +477,34 @@
             stroke-width: 2;
         }
 
+        .analytics-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 28px auto 0;
+            width: min(100%, 320px);
+            padding: 16px 28px;
+            border-radius: 24px;
+            border: 1px solid var(--accent-border);
+            background: var(--surface);
+            color: var(--accent-text);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .analytics-link:hover {
+            background: var(--surface-strong);
+            border-color: var(--accent-border-strong);
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12);
+            transform: translateY(-1px);
+        }
+
         @media (max-width: 700px) {
             .settings-btn {
                 top: 20px;
@@ -624,6 +652,7 @@
             Получить
         </button>
     </div>
+    <a href="analytics.html" class="analytics-link">Аналитика</a>
 </div>
 
     <script>
