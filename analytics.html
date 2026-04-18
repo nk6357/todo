@@ -355,6 +355,51 @@
             text-transform: uppercase;
         }
 
+        .total-score-card {
+            width: min(92vw, 760px);
+            max-width: 760px;
+            background: linear-gradient(135deg, 
+                var(--accent-soft) 0%, 
+                rgba(255, 100, 100, 0.08) 100%);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid var(--accent-border-strong);
+            border-radius: 32px;
+            padding: clamp(32px, 5vw, 48px) clamp(24px, 6vw, 60px);
+            text-align: center;
+            box-shadow:
+                0 0 80px rgba(0, 0, 0, 0.14),
+                inset 0 0 80px rgba(255, 255, 255, 0.03);
+            position: relative;
+            z-index: 1;
+        }
+
+        .total-score-label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-text);
+            margin-bottom: 12px;
+        }
+
+        .total-score-value {
+            font-size: clamp(32px, 8vw, 64px);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-text-alt), var(--accent-text));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            line-height: 1.1;
+        }
+
+        .total-score-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
         .results-box {
             width: min(680px, 100%);
             margin: 0 auto;
@@ -664,6 +709,23 @@
                 margin: 20px;
             }
 
+            .total-score-card {
+                padding: 24px 20px 28px;
+                margin: 16px;
+            }
+
+            .total-score-value {
+                font-size: clamp(28px, 7vw, 48px);
+            }
+
+            .total-score-label {
+                font-size: 11px;
+            }
+
+            .total-score-desc {
+                font-size: 12px;
+            }
+
             .heading {
                 font-size: 30px;
             }
@@ -800,6 +862,12 @@
             </div>
         </div>
 
+        <div class="total-score-card">
+            <div class="total-score-label">Общий результат</div>
+            <div class="total-score-value" id="totalScoreValue">—</div>
+            <div class="total-score-desc">Сумма средних баллов<br />по всем предметам</div>
+        </div>
+
         <a href="index.html" class="back-home">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -834,6 +902,7 @@
         const deleteModal = document.getElementById('deleteModal');
         const cancelDelete = document.getElementById('cancelDelete');
         const confirmDelete = document.getElementById('confirmDelete');
+        const totalScoreValue = document.getElementById('totalScoreValue');
 
         let currentSubject = 'math';
         let analyticsData = loadAnalyticsData();
@@ -883,6 +952,25 @@
             });
         }
 
+        function computeTotalScore() {
+            const averages = {
+                math: computeAverage(getLastResults('math')),
+                russian: computeAverage(getLastResults('russian')),
+                informatics: computeAverage(getLastResults('informatics'))
+            };
+            
+            const validAverages = Object.values(averages).filter(avg => avg !== null);
+            if (validAverages.length === 0) return null;
+            
+            const total = validAverages.reduce((sum, avg) => sum + avg, 0);
+            return Math.round(total);
+        }
+
+        function updateTotalScore() {
+            const total = computeTotalScore();
+            totalScoreValue.textContent = total !== null ? total : '—';
+        }
+
         function refreshAnalytics() {
             subjectName.textContent = subjectMap[currentSubject];
             updateButtonStates();
@@ -917,6 +1005,8 @@
             if (nearest !== null) {
                 averageValue.textContent = nearest;
             }
+            
+            updateTotalScore();
         }
 
         function addResult() {
@@ -954,6 +1044,7 @@
                 saveAnalyticsData();
                 hideDeleteModal();
                 refreshAnalytics();
+                updateTotalScore();
             }
         }
 
@@ -1001,6 +1092,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             refreshAnalytics();
+            updateTotalScore();
         });
     </script>
 
