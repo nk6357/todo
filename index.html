@@ -512,7 +512,73 @@
             transform: translateY(-1px);
         }
 
-        /* Стиль кнопки "Добавить задачу" */
+        .analytics-link + .analytics-link {
+            margin-top: 16px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: blur(12px);
+            padding: 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-content {
+            width: min(100%, 560px);
+            max-width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--accent-border);
+            border-radius: 28px;
+            padding: clamp(24px, 4vw, 32px);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 12px;
+            font-size: clamp(20px, 3vw, 24px);
+            font-weight: 800;
+        }
+
+        .modal-content p {
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: grid;
+            gap: 12px;
+        }
+
+        .modal-content .add-task-btn,
+        .modal-content .analytics-link {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 20px;
+            font-size: 15px;
+        }
+
+        .modal-content .analytics-link {
+            background: transparent;
+        }
+
+        .modal-content .add-task-btn {
+            border-style: solid;
+            border-width: 1px;
+        }
+
         .add-task-btn {
             display: inline-flex;
             align-items: center;
@@ -695,7 +761,7 @@
         </button>
     </div>
     <a href="./analytics.html" class="analytics-link">Аналитика</a>
-    <button id="printBtn" class="analytics-link" style="margin-top: 16px;">Печать</button>
+    <button id="printBtn" class="analytics-link" type="button">Печать</button>
 </div>
 
     <script>
@@ -754,14 +820,6 @@
 
     <script>
       // Регистрация Service Worker
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('Service Worker зарегистрирован'))
-            .catch(err => console.log('Ошибка:', err));
-        });
-      }
-
       // Motivation block functionality
       let motivations = [];
       let currentMotivationIndex = -1;
@@ -823,104 +881,140 @@
       });
     </script>
 
-    <!-- Модальное окно для печати — стиль как на фото -->
-    <div id="printModal" class="modal-overlay" style="display:none; position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:20px;">
-        <div class="modal-content" style="width:100%; max-width:600px; background:var(--surface); border-radius:28px; border:1px solid var(--accent-border); padding:32px; box-shadow:0 24px 80px rgba(0,0,0,0.3); backdrop-filter:blur(40px);">
-            <h2 style="color:var(--text-primary); font-size:20px; font-weight:800; margin-bottom:16px; text-align:center;">Печать</h2>
-            <p style="color:var(--text-muted); font-size:14px; margin-bottom:24px; text-align:center;">Сформировать PDF-отчёт с задачами</p>
-            <button id="downloadPdfBtn" class="add-task-btn" style="width:100%; margin:0 0 12px 0;">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-                Скачать PDF
-            </button>
-            <button id="closePrintModal" class="analytics-link" style="width:100%; padding:16px; font-size:15px; background:transparent;">Отмена</button>
+    <!-- Модальное окно для печати -->
+    <div id="printModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="printModalTitle">
+        <div class="modal-content">
+            <h2 id="printModalTitle">Печать</h2>
+            <p>Сформировать PDF-отчёт с задачами. Файл создаётся на белом фоне с чёрным текстом.</p>
+            <div class="modal-actions">
+                <button id="downloadPdfBtn" class="add-task-btn" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Скачать PDF
+                </button>
+                <button id="closePrintModal" class="analytics-link" type="button">Отмена</button>
+            </div>
         </div>
     </div>
 
     <script>
       // Функционал кнопки "Печать" и модального окна
-      document.getElementById('printBtn')?.addEventListener('click', () => {
-          document.getElementById('printModal').style.display = 'flex';
-      });
+      const printBtn = document.getElementById('printBtn');
+      const printModal = document.getElementById('printModal');
+      const closePrintModal = document.getElementById('closePrintModal');
+      const downloadPdfBtn = document.getElementById('downloadPdfBtn');
 
-      document.getElementById('closePrintModal')?.addEventListener('click', () => {
-          document.getElementById('printModal').style.display = 'none';
-      });
+      function openPrintModal() {
+          printModal.classList.add('open');
+      }
 
-      document.getElementById('downloadPdfBtn')?.addEventListener('click', async () => {
-          // Импорт библиотеки jsPDF
-          const script = document.createElement('script');
-          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-          document.head.appendChild(script);
+      function closePrintModalWindow() {
+          printModal.classList.remove('open');
+      }
 
-          script.onload = async () => {
-              // Ждем, пока jspdf загрузится
-              await new Promise(resolve => setTimeout(resolve, 300));
-              const { jsPDF } = window.jspdf;
+      function arrayBufferToBase64(buffer) {
+          let binary = '';
+          const bytes = new Uint8Array(buffer);
+          const chunkSize = 0x8000;
+          for (let i = 0; i < bytes.length; i += chunkSize) {
+              binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+          }
+          return btoa(binary);
+      }
 
-              // Регистрируем шрифт Noto Sans для кириллицы
-              const fontUrl = 'https://cdn.jsdelivr.net/npm/noto-sans@12.0.0/files/NotoSans-Regular.ttf';
-              const fontData = await fetch(fontUrl).then(res => res.arrayBuffer());
-              const fontName = 'NotoSans';
-              pdf.addFileToVFS(fontName + '.ttf', fontData);
-              pdf.addFont(fontName + '.ttf', fontName, 'normal');
+      function ensureJsPdfLoaded() {
+          if (window.jspdf && window.jspdf.jsPDF) {
+              return Promise.resolve(window.jspdf.jsPDF);
+          }
 
-              const pdf = new jsPDF({
-                orientation: 'p',
-                unit: 'mm',
-                format: 'a4'
-              });
-
-              // Устанавливаем шрифт
-              pdf.setFont(fontName, 'normal');
-
-              // Заголовок
-              pdf.setFontSize(22);
-              pdf.setTextColor(0, 0, 0);
-              pdf.text('ToDo ЕГЭ', pdf.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
-
-              let yPos = 40;
-
-              // Загрузка задач из localStorage
-              const subjects = ['math', 'russian', 'informatics'];
-              const titles = ['Математика', 'Русский язык', 'Информатика'];
-
-              for (let i = 0; i < subjects.length; i++) {
-                  const key = `${subjects[i]}_tasks`;
-                  const tasks = JSON.parse(localStorage.getItem(key) || '[]');
-
-                  if (tasks.length > 0) {
-                      // Заголовок предмета
-                      pdf.setFontSize(16);
-                      pdf.setFont(fontName, 'bold');
-                      pdf.text(titles[i], 10, yPos);
-                      yPos += 10;
-
-                      // Список задач
-                      pdf.setFontSize(12);
-                      pdf.setFont(fontName, 'normal');
-                      tasks.forEach(task => {
-                          pdf.text(`• ${task.text}`, 15, yPos);
-                          yPos += 8;
-                      });
-                      yPos += 10; // Отступ между блоками
+          return new Promise((resolve, reject) => {
+              const script = document.createElement('script');
+              script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+              script.onload = () => {
+                  if (window.jspdf && window.jspdf.jsPDF) {
+                      resolve(window.jspdf.jsPDF);
+                  } else {
+                      reject(new Error('jsPDF не загрузился'));
                   }
-              }
+              };
+              script.onerror = () => reject(new Error('Ошибка загрузки jsPDF'));
+              document.head.appendChild(script);
+          });
+      }
 
-              // Генерация имени файла с датой
+      async function buildPdf() {
+          const jsPDF = await ensureJsPdfLoaded();
+          const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+          const fontUrl = 'https://cdn.jsdelivr.net/npm/noto-sans@12.0.0/files/NotoSans-Regular.ttf';
+          const fontBuffer = await fetch(fontUrl).then(res => res.arrayBuffer());
+          const fontBase64 = arrayBufferToBase64(fontBuffer);
+          pdf.addFileToVFS('NotoSans-Regular.ttf', fontBase64);
+          pdf.addFont('NotoSans-Regular.ttf', 'NotoSans', 'normal');
+          pdf.setFont('NotoSans');
+          pdf.setTextColor(0, 0, 0);
+
+          pdf.setFontSize(22);
+          pdf.text('ToDo ЕГЭ', pdf.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
+          let yPos = 35;
+          const maxWidth = pdf.internal.pageSize.getWidth() - 20;
+          const marginLeft = 10;
+          const lineHeight = 8;
+
+          const subjects = ['math', 'russian', 'informatics'];
+          const titles = ['Математика', 'Русский язык', 'Информатика'];
+
+          const addPageIfNeeded = (y) => {
+              if (y > pdf.internal.pageSize.getHeight() - 20) {
+                  pdf.addPage();
+                  return 20;
+              }
+              return y;
+          };
+
+          for (let i = 0; i < subjects.length; i++) {
+              const key = `${subjects[i]}_tasks`;
+              const tasks = JSON.parse(localStorage.getItem(key) || '[]');
+              if (!tasks.length) continue;
+
+              yPos = addPageIfNeeded(yPos);
+              pdf.setFontSize(16);
+              pdf.setFont('NotoSans', 'normal');
+              pdf.text(titles[i], marginLeft, yPos);
+              yPos += lineHeight;
+
+              pdf.setFontSize(12);
+              for (const task of tasks) {
+                  yPos = addPageIfNeeded(yPos);
+                  const taskText = `• ${task.text || task}`;
+                  const lines = pdf.splitTextToSize(taskText, maxWidth - marginLeft);
+                  pdf.text(lines, marginLeft + 5, yPos);
+                  yPos += lines.length * lineHeight;
+              }
+              yPos += lineHeight;
+          }
+
+          return pdf;
+      }
+
+      printBtn?.addEventListener('click', openPrintModal);
+      closePrintModal?.addEventListener('click', closePrintModalWindow);
+      downloadPdfBtn?.addEventListener('click', async () => {
+          try {
+              const pdf = await buildPdf();
               const now = new Date();
               const dd = String(now.getDate()).padStart(2, '0');
               const mm = String(now.getMonth() + 1).padStart(2, '0');
               const yyyy = now.getFullYear();
               const fileName = `ToDo ЕГЭ ${dd}-${mm}-${yyyy}.pdf`;
-
-              // Сохранение PDF с именем файла
               pdf.save(fileName);
-              document.getElementById('printModal').style.display = 'none';
-          };
+              closePrintModalWindow();
+          } catch (error) {
+              console.error(error);
+              alert('Не удалось сформировать PDF. Попробуйте позже.');
+          }
       });
     </script>
 </body>
