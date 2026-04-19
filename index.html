@@ -926,16 +926,20 @@
       }
 
       function ensureJsPdfLoaded() {
-          if (window.jspdf && window.jspdf.jsPDF) {
-              return Promise.resolve(window.jspdf.jsPDF);
+          const existing = window.jspdf || window.jsPDF;
+          if (existing) {
+              return Promise.resolve(existing.jsPDF || existing.default || existing);
           }
 
           return new Promise((resolve, reject) => {
               const script = document.createElement('script');
               script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+              script.defer = true;
               script.onload = () => {
-                  if (window.jspdf && window.jspdf.jsPDF) {
-                      resolve(window.jspdf.jsPDF);
+                  const loaded = window.jspdf || window.jsPDF;
+                  const constructor = loaded && (loaded.jsPDF || loaded.default || loaded);
+                  if (constructor) {
+                      resolve(constructor);
                   } else {
                       reject(new Error('jsPDF не загрузился'));
                   }
@@ -946,16 +950,26 @@
       }
 
       async function buildPdf() {
-          const jsPDF = await ensureJsPdfLoaded();
-          const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
-          const fontUrl = 'https://cdn.jsdelivr.net/npm/noto-sans@12.0.0/files/NotoSans-Regular.ttf';
-          const fontBuffer = await fetch(fontUrl).then(res => res.arrayBuffer());
-          const fontBase64 = arrayBufferToBase64(fontBuffer);
-          pdf.addFileToVFS('NotoSans-Regular.ttf', fontBase64);
-          pdf.addFont('NotoSans-Regular.ttf', 'NotoSans', 'normal');
-          pdf.setFont('NotoSans');
+          const JsPDF = await ensureJsPdfLoaded();
+          const pdf = new JsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
           pdf.setTextColor(0, 0, 0);
 
+          const fontUrl = 'https://cdn.jsdelivr.net/npm/noto-sans@12.0.0/files/NotoSans-Regular.ttf';
+          let pdfFont = 'Helvetica';
+          try {
+              const fontBuffer = await fetch(fontUrl).then(res => {
+                  if (!res.ok) throw new Error('Не удалось загрузить шрифт');
+                  return res.arrayBuffer();
+              });
+              const fontBase64 = arrayBufferToBase64(fontBuffer);
+              pdf.addFileToVFS('NotoSans-Regular.ttf', fontBase64);
+              pdf.addFont('NotoSans-Regular.ttf', 'NotoSans', 'normal');
+              pdfFont = 'NotoSans';
+          } catch (fontError) {
+              console.warn('Шрифт Noto Sans не загружен, используется Helvetica:', fontError);
+          }
+
+          pdf.setFont(pdfFont, 'normal');
           pdf.setFontSize(22);
           pdf.text('ToDo ЕГЭ', pdf.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
           let yPos = 35;
@@ -981,7 +995,7 @@
 
               yPos = addPageIfNeeded(yPos);
               pdf.setFontSize(16);
-              pdf.setFont('NotoSans', 'normal');
+              pdf.setFont(pdfFont, 'normal');
               pdf.text(titles[i], marginLeft, yPos);
               yPos += lineHeight;
 
