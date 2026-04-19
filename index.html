@@ -900,6 +900,7 @@
         </div>
     </div>
 
+    <script src="./js/jspdf.umd.min.js"></script>
     <script>
       // Функционал кнопки "Печать" и модального окна
       const printBtn = document.getElementById('printBtn');
@@ -930,23 +931,7 @@
           if (existing) {
               return Promise.resolve(existing.jsPDF || existing.default || existing);
           }
-
-          return new Promise((resolve, reject) => {
-              const script = document.createElement('script');
-              script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-              script.defer = true;
-              script.onload = () => {
-                  const loaded = window.jspdf || window.jsPDF;
-                  const constructor = loaded && (loaded.jsPDF || loaded.default || loaded);
-                  if (constructor) {
-                      resolve(constructor);
-                  } else {
-                      reject(new Error('jsPDF не загрузился'));
-                  }
-              };
-              script.onerror = () => reject(new Error('Ошибка загрузки jsPDF'));
-              document.head.appendChild(script);
-          });
+          return Promise.reject(new Error('jsPDF не найден. Убедитесь, что библиотека загружена.'));
       }
 
       async function buildPdf() {
@@ -954,8 +939,8 @@
           const pdf = new JsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
           pdf.setTextColor(0, 0, 0);
 
-          const regularFontUrl = 'https://cdn.jsdelivr.net/gh/googlefonts/noto-fonts@main/hinted/ttf/NotoSans/NotoSans-Regular.ttf';
-          const boldFontUrl = 'https://cdn.jsdelivr.net/gh/googlefonts/noto-fonts@main/hinted/ttf/NotoSans/NotoSans-Bold.ttf';
+          const regularFontUrl = './fonts/NotoSans-Regular.ttf';
+          const boldFontUrl = './fonts/NotoSans-Bold.ttf';
           let pdfFont = 'Helvetica';
           try {
               const regularBuffer = await fetch(regularFontUrl).then(res => {
@@ -975,13 +960,13 @@
               console.warn('Шрифт Noto Sans не загружен, используется Helvetica:', fontError);
           }
 
-          pdf.setFont(pdfFont, 'normal');
-          pdf.setFontSize(22);
-          pdf.text('ToDo ЕГЭ', pdf.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
-          let yPos = 35;
+          pdf.setFont(pdfFont, 'bold');
+          pdf.setFontSize(44);
+          pdf.text('ToDo ЕГЭ', pdf.internal.pageSize.getWidth() / 2, 25, { align: 'center' });
+          let yPos = 40;
           const maxWidth = pdf.internal.pageSize.getWidth() - 20;
           const marginLeft = 10;
-          const lineHeight = 8;
+          const lineHeight = 10;
 
           const subjects = ['math', 'russian', 'informatics'];
           const titles = ['Математика', 'Русский язык', 'Информатика'];
@@ -1000,12 +985,12 @@
               if (!tasks.length) continue;
 
               yPos = addPageIfNeeded(yPos);
-              pdf.setFontSize(16);
+              pdf.setFontSize(32);
               pdf.setFont(pdfFont, 'bold');
               pdf.text(titles[i], marginLeft, yPos);
-              yPos += lineHeight;
+              yPos += lineHeight * 2;
 
-              pdf.setFontSize(12);
+              pdf.setFontSize(24);
               pdf.setFont(pdfFont, 'normal');
               for (const task of tasks) {
                   yPos = addPageIfNeeded(yPos);

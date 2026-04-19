@@ -15,6 +15,9 @@ const ASSETS_TO_CACHE = [
   './manifest.json',
   './theme.js',
   './sw.js',
+  './js/jspdf.umd.min.js',
+  './fonts/NotoSans-Regular.ttf',
+  './fonts/NotoSans-Bold.ttf',
   './icons/icon-192x192.png',
   './icons/icon-512x512.png'
 ];
