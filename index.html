@@ -954,16 +954,22 @@
           const pdf = new JsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
           pdf.setTextColor(0, 0, 0);
 
-          const fontUrl = 'https://cdn.jsdelivr.net/npm/noto-sans@12.0.0/files/NotoSans-Regular.ttf';
+          const regularFontUrl = 'https://cdn.jsdelivr.net/gh/googlefonts/noto-fonts@main/hinted/ttf/NotoSans/NotoSans-Regular.ttf';
+          const boldFontUrl = 'https://cdn.jsdelivr.net/gh/googlefonts/noto-fonts@main/hinted/ttf/NotoSans/NotoSans-Bold.ttf';
           let pdfFont = 'Helvetica';
           try {
-              const fontBuffer = await fetch(fontUrl).then(res => {
-                  if (!res.ok) throw new Error('Не удалось загрузить шрифт');
+              const regularBuffer = await fetch(regularFontUrl).then(res => {
+                  if (!res.ok) throw new Error('Не удалось загрузить регулярный шрифт');
                   return res.arrayBuffer();
               });
-              const fontBase64 = arrayBufferToBase64(fontBuffer);
-              pdf.addFileToVFS('NotoSans-Regular.ttf', fontBase64);
+              const boldBuffer = await fetch(boldFontUrl).then(res => {
+                  if (!res.ok) throw new Error('Не удалось загрузить жирный шрифт');
+                  return res.arrayBuffer();
+              });
+              pdf.addFileToVFS('NotoSans-Regular.ttf', arrayBufferToBase64(regularBuffer));
               pdf.addFont('NotoSans-Regular.ttf', 'NotoSans', 'normal');
+              pdf.addFileToVFS('NotoSans-Bold.ttf', arrayBufferToBase64(boldBuffer));
+              pdf.addFont('NotoSans-Bold.ttf', 'NotoSans', 'bold');
               pdfFont = 'NotoSans';
           } catch (fontError) {
               console.warn('Шрифт Noto Sans не загружен, используется Helvetica:', fontError);
@@ -995,11 +1001,12 @@
 
               yPos = addPageIfNeeded(yPos);
               pdf.setFontSize(16);
-              pdf.setFont(pdfFont, 'normal');
+              pdf.setFont(pdfFont, 'bold');
               pdf.text(titles[i], marginLeft, yPos);
               yPos += lineHeight;
 
               pdf.setFontSize(12);
+              pdf.setFont(pdfFont, 'normal');
               for (const task of tasks) {
                   yPos = addPageIfNeeded(yPos);
                   const taskText = `• ${task.text || task}`;
