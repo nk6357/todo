@@ -7,19 +7,16 @@
     <!-- Ссылка на манифест -->
     <link rel="manifest" href="./manifest.json">
 
-    <!-- Настройки для iOS -->
+    <!-- Настройки для iOS (iPhone), чтобы выглядело как приложение -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ЕГЭ 2026">
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="./icons/android-chrome-192x192.png">
 
-    <!-- Цвет вкладки -->
+    <!-- Цвет вкладки браузера под твой дизайн -->
     <meta name="theme-color" content="#1a0a0a">
     <script src="./theme.js"></script>
-
-    <!-- Шрифт для PDF (UTF-8) -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
 
     <title>Цели на ЕГЭ</title>
     <style>
@@ -113,7 +110,7 @@
             50% { transform: translateY(-40px) scale(1.08); }
         }
 
-        /* Settings button */
+        /* Login button - top right corner */
         .settings-btn {
             position: fixed;
             top: 30px;
@@ -191,6 +188,14 @@
             transition: all 0.2s ease;
         }
 
+        .page-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 0;
+        }
+
         .theme-swatch:hover {
             transform: translateY(-2px);
             border-color: var(--accent-border);
@@ -239,7 +244,7 @@
             background-clip: text;
         }
 
-        /* Circles */
+        /* Circles container */
         .circles {
             display: flex;
             flex-wrap: wrap;
@@ -313,7 +318,7 @@
             }
         }
 
-        /* Score */
+        /* Score inside circle */
         .score-wrapper {
             position: relative;
             display: inline-block;
@@ -336,7 +341,7 @@
             color: var(--text-muted);
         }
 
-        /* Subject */
+        /* Subject label */
         .subject {
             font-size: 15px;
             font-weight: 600;
@@ -492,6 +497,7 @@
             text-decoration: none;
             cursor: pointer;
             transition: all 0.25s ease;
+            /* 👇 ДОБАВЛЕНО: чтобы ссылка была кликабельной поверх других элементов */
             position: relative;
             z-index: 50;
         }
@@ -503,12 +509,12 @@
             transform: translateY(-1px);
         }
 
-        /* Кнопка "Добавить задачу" — стиль для PDF-кнопки */
-        .add-task-btn, .download-pdf-btn {
+        /* Стиль кнопки "Добавить задачу" */
+        .add-task-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             padding: 16px 24px;
             width: 100%;
             border-radius: 24px;
@@ -525,13 +531,13 @@
             text-decoration: none;
         }
 
-        .add-task-btn:hover, .download-pdf-btn:hover {
+        .add-task-btn:hover {
             border-color: var(--accent-text-alt);
             color: var(--accent-text-alt);
             transform: translateY(-1px);
         }
 
-        .add-task-btn svg, .download-pdf-btn svg {
+        .add-task-btn svg {
             width: 20px;
             height: 20px;
             stroke: currentColor;
@@ -606,7 +612,7 @@
 
         <div class="circles">
 
-            <!-- Русский -->
+            <!-- Русский — 81 -->
             <a href="russian.html" class="circle-item" style="text-decoration: none; color: inherit;">
                 <div class="score-wrapper">
                     <svg class="progress-ring" viewBox="0 0 140 140">
@@ -617,7 +623,8 @@
                             </linearGradient>
                         </defs>
                         <circle class="progress-ring__bg" cx="70" cy="70" r="65"/>
-                        <circle class="progress-ring__fill" cx="70" cy="70" r="65" style="--offset: 77.6;"/>
+                        <circle class="progress-ring__fill" cx="70" cy="70" r="65"
+                            style="--offset: 77.6;"/>
                     </svg>
                     <div class="score">81</div>
                 </div>
@@ -625,7 +632,7 @@
                 <div class="glow-dot"></div>
             </a>
 
-            <!-- Математика -->
+            <!-- Математика — 82 -->
             <a href="math.html" class="circle-item" style="text-decoration: none; color: inherit;">
                 <div class="score-wrapper">
                     <svg class="progress-ring" viewBox="0 0 140 140">
@@ -636,7 +643,8 @@
                             </linearGradient>
                         </defs>
                         <circle class="progress-ring__bg" cx="70" cy="70" r="65"/>
-                        <circle class="progress-ring__fill" cx="70" cy="70" r="65" style="--offset: 73.5;"/>
+                        <circle class="progress-ring__fill" cx="70" cy="70" r="65"
+                            style="--offset: 73.5;"/>
                     </svg>
                     <div class="score">82</div>
                 </div>
@@ -644,7 +652,7 @@
                 <div class="glow-dot"></div>
             </a>
 
-            <!-- Информатика -->
+            <!-- Информатика — 93 -->
             <a href="informatics.html" class="circle-item" style="text-decoration: none; color: inherit;">
                 <div class="score-wrapper">
                     <svg class="progress-ring" viewBox="0 0 140 140">
@@ -655,7 +663,8 @@
                             </linearGradient>
                         </defs>
                         <circle class="progress-ring__bg" cx="70" cy="70" r="65"/>
-                        <circle class="progress-ring__fill" cx="70" cy="70" r="65" style="--offset: 28.6;"/>
+                        <circle class="progress-ring__fill" cx="70" cy="70" r="65"
+                            style="--offset: 28.6;"/>
                     </svg>
                     <div class="score">93</div>
                 </div>
@@ -683,37 +692,62 @@
         </button>
     </div>
     <a href="./analytics.html" class="analytics-link">Аналитика</a>
-    <button id="printBtn" class="add-task-btn" style="margin-top: 16px;">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-        Печать
-    </button>
+    <button id="printBtn" class="analytics-link" style="margin-top: 16px;">Печать</button>
+</div>
 
-    <!-- Модальное окно для печати -->
-    <div id="printModal" class="modal-overlay" style="display:none; position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:20px;">
-        <div class="modal-content" style="width:100%; max-width:600px; background:var(--surface); border-radius:28px; border:1px solid var(--accent-border); padding:32px; box-shadow:0 24px 80px rgba(0,0,0,0.3); backdrop-filter:blur(40px);">
-            <h2 style="color:var(--text-primary); font-size:20px; font-weight:800; margin-bottom:24px; text-align:center;">PDF-отчет готов</h2>
-            <p style="color:var(--text-muted); font-size:14px; margin-bottom:24px; text-align:center;">Файл будет сформирован с белым фоном и черным текстом.</p>
-            <button id="downloadPdfBtn" class="download-pdf-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-                Скачать PDF
-            </button>
-            <button id="closePrintModal" class="add-task-btn" style="margin-top:12px; border-color:var(--accent-border); color:var(--accent-text); background:transparent;">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"/>
-                    <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-                Отмена
-            </button>
-        </div>
-    </div>
+    <script>
+      // Регистрация Service Worker для работы офлайн
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', async () => {
+          try {
+            const registration = await navigator.serviceWorker.register('./sw.js', {
+              scope: './'
+            });
+            console.log('[App] Service Worker зарегистрирован:', registration.scope);
+
+            // Проверка обновлений каждые 6 часов
+            setInterval(() => {
+              registration.update();
+            }, 6 * 60 * 60 * 1000);
+
+            // Слушаем новые обновления
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  // Новое обновление доступно
+                  console.log('[App] Доступно обновление приложения');
+                  // Уведомляем пользователя (опционально)
+                  if (confirm('Доступно обновление приложения. Установить?')) {
+                    newWorker.postMessage({ type: 'SKIP_WAITING' });
+                    window.location.reload();
+                  }
+                }
+              });
+            });
+          } catch (error) {
+            console.error('[App] Ошибка регистрации Service Worker:', error);
+          }
+        });
+
+        // Обработка сообщений от Service Worker
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (refreshing) return;
+          refreshing = true;
+          console.log('[App] Service Worker обновлён');
+        });
+      }
+
+      // Проверка статуса подключения
+      window.addEventListener('online', () => {
+        console.log('[App] Соединение восстановлено');
+      });
+
+      window.addEventListener('offline', () => {
+        console.log('[App] Потеря соединения - переход в офлайн-режим');
+      });
+    </script>
 
     <script>
       // Регистрация Service Worker
@@ -725,7 +759,7 @@
         });
       }
 
-      // Motivation block
+      // Motivation block functionality
       let motivations = [];
       let currentMotivationIndex = -1;
 
@@ -738,8 +772,11 @@
             const text = await response.text();
             motivations = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
             if (motivations.length) return;
-          } catch (_) {}
+          } catch (_) {
+            // попытка следующего пути
+          }
         }
+
         motivations = [
           'Ты справишься! Верь в себя!',
           'Каждый день — это новая возможность.',
@@ -750,109 +787,125 @@
 
       function getRandomMotivation() {
         if (motivations.length === 0) return 'Как насчет мотивации?)';
+
         let randomIndex;
         do {
           randomIndex = Math.floor(Math.random() * motivations.length);
         } while (randomIndex === currentMotivationIndex && motivations.length > 1);
+
         currentMotivationIndex = randomIndex;
         return motivations[randomIndex];
       }
 
       function displayMotivation() {
-        const el = document.getElementById('motivationText');
-        const newTxt = getRandomMotivation();
-        el.classList.remove('animate');
-        el.style.opacity = '0';
+        const motivationText = document.getElementById('motivationText');
+        const newMotivation = getRandomMotivation();
+
+        motivationText.classList.remove('animate');
+        motivationText.style.opacity = '0';
+
         setTimeout(() => {
-          el.textContent = newTxt;
-          el.style.opacity = '1';
-          el.classList.add('animate');
+          motivationText.textContent = newMotivation;
+          motivationText.style.opacity = '1';
+          motivationText.classList.add('animate');
         }, 50);
       }
 
       document.addEventListener('DOMContentLoaded', async () => {
         await loadMotivations();
-        document.getElementById('motivationBtn')?.addEventListener('click', displayMotivation);
+        const motivationBtn = document.getElementById('motivationBtn');
+        if (motivationBtn) {
+          motivationBtn.addEventListener('click', displayMotivation);
+        }
       });
+    </script>
 
-      // Кнопка "Печать"
+    <!-- Модальное окно для печати -->
+    <div id="printModal" class="modal-overlay" style="display:none; position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:20px;">
+        <div class="modal-content" style="width:100%; max-width:600px; background:var(--surface); border-radius:28px; border:1px solid var(--accent-border); padding:32px; box-shadow:0 24px 80px rgba(0,0,0,0.3); backdrop-filter:blur(40px);">
+            <h2 style="color:var(--text-primary); font-size:20px; font-weight:800; margin-bottom:24px; text-align:center;">PDF-отчет готов</h2>
+            <p style="color:var(--text-muted); font-size:14px; margin-bottom:24px; text-align:center;">Файл будет сформирован с белым фоном и черным текстом.</p>
+            <button id="downloadPdfBtn" class="add-task-btn" style="width:100%; margin:0 0 12px 0;">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Скачать PDF
+            </button>
+            <button id="closePrintModal" class="analytics-link" style="width:100%; padding:16px; font-size:15px; background:transparent;">Отмена</button>
+        </div>
+    </div>
+
+    <script>
+      // Функционал кнопки "Печать" и модального окна
       document.getElementById('printBtn')?.addEventListener('click', () => {
-        document.getElementById('printModal').style.display = 'flex';
+          document.getElementById('printModal').style.display = 'flex';
       });
 
       document.getElementById('closePrintModal')?.addEventListener('click', () => {
-        document.getElementById('printModal').style.display = 'none';
+          document.getElementById('printModal').style.display = 'none';
       });
 
       document.getElementById('downloadPdfBtn')?.addEventListener('click', async () => {
-        // Загружаем jsPDF
-        const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-        document.head.appendChild(script);
+          // Импорт библиотеки jsPDF
+          const script = document.createElement('script');
+          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+          document.head.appendChild(script);
 
-        script.onload = async () => {
-          await new Promise(r => setTimeout(r, 300));
-          const { jsPDF } = window.jspdf;
+          script.onload = async () => {
+              // Ждем, пока jspdf загрузится
+              await new Promise(resolve => setTimeout(resolve, 300));
+              const { jsPDF } = window.jspdf;
 
-          // Создаём PDF с поддержкой кириллицы
-          const pdf = new jsPDF({
-            orientation: 'p',
-            unit: 'mm',
-            format: 'a4'
-          });
+              const pdf = new jsPDF();
 
-          // Регистрируем шрифт Noto Sans (UTF-8)
-          const fontUrl = 'https://cdn.jsdelivr.net/npm/noto-sans@12.0.0/files/NotoSans-Regular.ttf';
-          const fontData = await fetch(fontUrl).then(res => res.arrayBuffer());
-          const fontName = 'NotoSans';
-          pdf.addFileToVFS(fontName + '.ttf', fontData);
-          pdf.addFont(fontName + '.ttf', fontName, 'normal');
-          pdf.setFont(fontName);
+              // Заголовок
+              pdf.setFontSize(22);
+              pdf.setTextColor(0, 0, 0); // Черный цвет
+              pdf.text('ToDo ЕГЭ', pdf.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
 
-          // Заголовок
-          pdf.setFontSize(22);
-          pdf.setTextColor(0, 0, 0);
-          pdf.text('ToDo ЕГЭ', pdf.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
+              let yPos = 40;
 
-          let yPos = 40;
+              // Загрузка задач из localStorage
+              const subjects = ['math', 'russian', 'informatics'];
+              const titles = ['Математика', 'Русский язык', 'Информатика'];
 
-          // Предметы и задачи
-          const subjects = ['math', 'russian', 'informatics'];
-          const titles = ['Математика', 'Русский язык', 'Информатика'];
+              for (let i = 0; i < subjects.length; i++) {
+                  const key = `${subjects[i]}_tasks`;
+                  const tasks = JSON.parse(localStorage.getItem(key) || '[]');
 
-          for (let i = 0; i < subjects.length; i++) {
-            const key = `${subjects[i]}_tasks`;
-            const tasks = JSON.parse(localStorage.getItem(key) || '[]');
+                  if (tasks.length > 0) {
+                      // Заголовок предмета
+                      pdf.setFontSize(16);
+                      pdf.setFont(undefined, 'bold');
+                      pdf.text(titles[i], 10, yPos);
+                      yPos += 10;
 
-            if (tasks.length > 0) {
-              // Заголовок предмета
-              pdf.setFontSize(16);
-              pdf.setFont(fontName, 'bold');
-              pdf.text(titles[i], 10, yPos);
-              yPos += 10;
+                      // Список задач
+                      pdf.setFontSize(12);
+                      pdf.setFont(undefined, 'normal');
+                      tasks.forEach(task => {
+                          pdf.text(`• ${task.text}`, 15, yPos);
+                          yPos += 8;
+                      });
+                      yPos += 10; // Отступ между блоками
+                  }
+              }
 
-              // Задачи
-              pdf.setFontSize(12);
-              pdf.setFont(fontName, 'normal');
-              tasks.forEach(task => {
-                pdf.text(`• ${task.text}`, 15, yPos);
-                yPos += 8;
-              });
-              yPos += 10;
-            }
-          }
+              // Генерация имени файла с датой
+              const now = new Date();
+              const formattedDate = now.toLocaleDateString('ru-RU', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit'
+              }).replace(/\./g, '-');
+              const fileName = `ToDo ЕГЭ ${formattedDate}.pdf`;
 
-          // Генерируем имя файла с датой
-          const now = new Date();
-          const dd = String(now.getDate()).padStart(2, '0');
-          const mm = String(now.getMonth() + 1).padStart(2, '0');
-          const yyyy = now.getFullYear();
-          const fileName = `ToDo ЕГЭ ${dd}-${mm}-${yyyy}.pdf`;
-
-          // Сохраняем
-          pdf.save(fileName);
-          document.getElementById('printModal').style.display = 'none';
-        };
+              // Сохранение PDF с именем файла
+              pdf.save(fileName);
+              document.getElementById('printModal').style.display = 'none';
+          };
       });
     </script>
 </body>
