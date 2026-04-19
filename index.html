@@ -18,6 +18,9 @@
     <meta name="theme-color" content="#1a0a0a">
     <script src="./theme.js"></script>
 
+    <!-- Шрифт для PDF с кириллицей -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+
     <title>Цели на ЕГЭ</title>
     <style>
         :root {
@@ -858,11 +861,25 @@
               await new Promise(resolve => setTimeout(resolve, 300));
               const { jsPDF } = window.jspdf;
 
-              const pdf = new jsPDF();
+              // Регистрируем шрифт Noto Sans для кириллицы
+              const fontUrl = 'https://cdn.jsdelivr.net/npm/noto-sans@12.0.0/files/NotoSans-Regular.ttf';
+              const fontData = await fetch(fontUrl).then(res => res.arrayBuffer());
+              const fontName = 'NotoSans';
+              pdf.addFileToVFS(fontName + '.ttf', fontData);
+              pdf.addFont(fontName + '.ttf', fontName, 'normal');
+
+              const pdf = new jsPDF({
+                orientation: 'p',
+                unit: 'mm',
+                format: 'a4'
+              });
+
+              // Устанавливаем шрифт
+              pdf.setFont(fontName, 'normal');
 
               // Заголовок
               pdf.setFontSize(22);
-              pdf.setTextColor(0, 0, 0); // Черный цвет
+              pdf.setTextColor(0, 0, 0);
               pdf.text('ToDo ЕГЭ', pdf.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
 
               let yPos = 40;
@@ -878,13 +895,13 @@
                   if (tasks.length > 0) {
                       // Заголовок предмета
                       pdf.setFontSize(16);
-                      pdf.setFont(undefined, 'bold');
+                      pdf.setFont(fontName, 'bold');
                       pdf.text(titles[i], 10, yPos);
                       yPos += 10;
 
                       // Список задач
                       pdf.setFontSize(12);
-                      pdf.setFont(undefined, 'normal');
+                      pdf.setFont(fontName, 'normal');
                       tasks.forEach(task => {
                           pdf.text(`• ${task.text}`, 15, yPos);
                           yPos += 8;
@@ -895,12 +912,10 @@
 
               // Генерация имени файла с датой
               const now = new Date();
-              const formattedDate = now.toLocaleDateString('ru-RU', {
-                  year: 'numeric',
-                  month: '2-digit',
-                  day: '2-digit'
-              }).replace(/\./g, '-');
-              const fileName = `ToDo ЕГЭ ${formattedDate}.pdf`;
+              const dd = String(now.getDate()).padStart(2, '0');
+              const mm = String(now.getMonth() + 1).padStart(2, '0');
+              const yyyy = now.getFullYear();
+              const fileName = `ToDo ЕГЭ ${dd}-${mm}-${yyyy}.pdf`;
 
               // Сохранение PDF с именем файла
               pdf.save(fileName);
